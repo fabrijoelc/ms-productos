@@ -7,11 +7,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +23,14 @@ import java.util.stream.Collectors;
 @Component
 public class JwtServiceImpl implements JwtService {
 
-    // Generamos una clave
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    // ✅ Devuelve una clave segura basada en la clave en Base64
+    private Key getKey() {
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        return Keys.hmacShaKeyFor(decodedKey);
+    }
 
     @Override
     public String extractUserName(String token) {
@@ -48,7 +56,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .claim("datoExtra", 123456)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -66,7 +74,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 600000)) // 10 minutos
                 .claim("type", Constants.REFRESH)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(getKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -77,9 +85,10 @@ public class JwtServiceImpl implements JwtService {
         return Constants.REFRESH.equalsIgnoreCase(typeToken);
     }
 
+    // 🔍 EXTRAER CLAIMS
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -93,6 +102,7 @@ public class JwtServiceImpl implements JwtService {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
+    // Agrega roles y datos de seguridad
     private Map<String, Object> addClaims(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("accountNonExpired", usuario.isAccountNonExpired());
@@ -105,4 +115,5 @@ public class JwtServiceImpl implements JwtService {
         return claims;
     }
 }
+
 
