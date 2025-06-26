@@ -13,6 +13,10 @@ import org.springframework.security.core.GrantedAuthority;
 @Builder
 public class Rol implements GrantedAuthority {
 
+    public static final String ADMIN = "ADMIN";
+    public static final String USER = "USER";
+    public static final String SUPERADMIN = "SUPERADMIN";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,3 +29,4 @@ public class Rol implements GrantedAuthority {
         return nombre;
     }
 }
+
