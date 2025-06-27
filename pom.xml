@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.codigo</groupId>
-	<artifactId>ms-auth</artifactId>
+	<artifactId>ms-productos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-auth</name>
+	<name>ms-productos</name>
 	<description>Microservicio que se encargara de la seguridad</description>
 	<url/>
 	<licenses>
