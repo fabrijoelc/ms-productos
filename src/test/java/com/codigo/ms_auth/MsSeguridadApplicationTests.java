@@ -1,4 +1,4 @@
-package com.codigo.ms_seguridad;
+package com.codigo.ms_auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

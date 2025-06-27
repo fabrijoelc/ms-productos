@@ -155,7 +155,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private Usuario getUsuarioEntity(SignUpRequest signUpRequest) {
         return Usuario.builder()
                 .nombres(signUpRequest.getNombres())
-                .apellidos(signUpRequest.getApellidos())
+                .apellidos(signUpRequest.getApellido())
                 .email(signUpRequest.getEmail())
                 .password(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()))
                 .tipoDoc(signUpRequest.getTipoDoc())

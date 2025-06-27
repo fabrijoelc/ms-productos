@@ -85,6 +85,11 @@ public class JwtServiceImpl implements JwtService {
         return Constants.REFRESH.equalsIgnoreCase(typeToken);
     }
 
+    public boolean isTokenValid(String token) {
+        // lógica real o temporal
+        return true; // para pruebas
+    }
+
     // 🔍 EXTRAER CLAIMS
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
@@ -114,6 +119,7 @@ public class JwtServiceImpl implements JwtService {
                 .collect(Collectors.toList()));
         return claims;
     }
+
 }
 
 
