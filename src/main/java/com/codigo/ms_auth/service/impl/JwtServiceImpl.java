@@ -28,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
 
     // ✅ Devuelve una clave segura basada en la clave en Base64
     private Key getKey() {
-        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        byte[] decodedKey = Base64.getUrlDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(decodedKey);
     }
 
