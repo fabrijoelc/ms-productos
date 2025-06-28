@@ -12,7 +12,7 @@
 	<artifactId>ms-productos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-productos</name>
-	<description>Microservicio que se encargara de la seguridad</description>
+	<description>Microservicio para gestión de productos (CRUD)</description>
 	<url/>
 	<licenses>
 		<license/>
