@@ -1,4 +1,4 @@
-package com.codigo.ms_productos.service.impl;
+package com.codigo.ms_productos.serviceImpl;
 
 import com.codigo.ms_productos.entity.Producto;
 import com.codigo.ms_productos.repository.ProductoRepository;
@@ -18,8 +18,15 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public Producto crearProducto(Producto producto) {
-        return productoRepository.save(producto);
+        Producto nuevo = Producto.builder()
+                .nombre(producto.getNombre())
+                .precio(producto.getPrecio())
+                .categoria(producto.getCategoria())
+                .build();
+
+        return productoRepository.save(nuevo);
     }
+
 
     @Override
     public List<Producto> listarProductos() {

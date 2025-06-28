@@ -15,10 +15,10 @@ public class AuthValidator {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    // URL del ms-auth para validar tokens
-    private static final String URL_VALIDATE = "http://localhost:8080/auth/validate";
+    // URL del endpoint de validación en ms-auth (AJUSTADO CORRECTAMENTE)
+    private static final String URL_VALIDATE = "http://localhost:8080/apis/auth/api/authentication/v1/validate";
 
-    // Roles permitidos para acceder
+    // Roles permitidos para acceder a ms-productos
     private static final List<String> ROLES_PERMITIDOS = Arrays.asList("ADMIN", "SUPERADMIN");
 
     public AuthValidator() {
@@ -39,16 +39,31 @@ public class AuthValidator {
                     String.class
             );
 
+            System.out.println("Respuesta completa de validación: " + response.getBody());
+
             if (response.getStatusCode() == HttpStatus.OK) {
                 JsonNode json = objectMapper.readTree(response.getBody());
-                String rol = json.get("rol").asText();
-                return ROLES_PERMITIDOS.contains(rol);
+                JsonNode rolesNode = json.get("roles");
+
+                if (rolesNode != null && rolesNode.isArray()) {
+                    for (JsonNode rol : rolesNode) {
+                        String rolTexto = rol.asText();
+                        System.out.println("Rol detectado: " + rolTexto);
+                        System.out.println("Comparando con permitidos: " + ROLES_PERMITIDOS);
+                        if (ROLES_PERMITIDOS.contains(rolTexto)) {
+                            System.out.println("✅ Acceso concedido");
+                            return true;
+                        }
+                    }
+                }
             }
 
         } catch (Exception e) {
-            System.out.println("Error al validar token: " + e.getMessage());
+            System.out.println("❌ Error al validar token: " + e.getMessage());
         }
 
+        System.out.println("🚫 Acceso denegado");
         return false;
     }
 }
+
